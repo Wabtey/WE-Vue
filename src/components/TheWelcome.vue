@@ -1,8 +1,13 @@
 <template>
-  <h1>hello</h1>
-  <p v-if="visible">Maintenant vous me voyez {{ title }}</p>
-  <button v-on:click="foo()">ok</button>
+  <div class="home">
+    <h1>How are you?</h1>
+    <p v-if="visible">I'm just fine, {{ title }}, thanks for asking.</p>
+    <button v-on:click="foo()">answer</button>
+    <div v-background>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</div>
+    <div v-background:green>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</div>
+  </div>
 </template>
+
 <script lang="ts">
 // DO NOT USE <script setup>
 
@@ -17,12 +22,12 @@
 import { Component, Vue, toNative } from 'vue-facing-decorator'
 @Component
 class TheWelcome extends Vue {
-  title: string = 'test'
-  visible = true
+  title: string = 'not cool person'
+  visible = false
 
   foo(): void {
     this.visible = !this.visible
-    this.title = 'test1'
+    this.title = 'homie'
   }
 }
 export default toNative(TheWelcome)
