@@ -1,18 +1,19 @@
 <template>
-    <h1>Tasks list</h1>
-    <input v-model="input_message" placeholder="Your task">
-    <button v-on:click="add_task(input_message)">add</button>
-
-    <li v-for="todo in todos_list"
-        :key="todo.title"
-    >
-        <button v-on:click="complete_task(todo)" v-if="is_completed(todo)">x</button>
-        <button v-on:click="complete_task(todo)" v-if="!is_completed(todo)">_</button>
-        {{ todo.title }},
-        {{ todo.status }}
-        <!-- <todo /> -->
-    </li>
+    <div class="todos">
+        <h1>Tasks list</h1>
+        <input v-model="input_message" placeholder="Your task">
+        <button v-on:click="add_task(input_message)">add</button>
     
+        <li v-for="todo in todos_list"
+            :key="todo.title"
+        >
+            <button v-on:click="complete_task(todo)" v-if="is_completed(todo)">x</button>
+            <button v-on:click="complete_task(todo)" v-if="!is_completed(todo)">_</button>
+            {{ todo.title }},
+            {{ todo.status }}
+        </li>
+    </div>
+
     <!-- <li v-if="!todo.isComplete">
       {{ todo.title }}
     </li> -->
@@ -64,6 +65,12 @@
             return todo.status == TodoStatus.Completed;
         }
     }
-    export default toNative(Todos)
+    export default toNative(Todos);
 </script>
-<style></style>
+<style>
+    /* .todos h1, */
+    .todos input{
+        text-align: center;
+        /* justify-content: center; */
+    }
+</style>
