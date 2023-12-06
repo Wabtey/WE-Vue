@@ -13,12 +13,14 @@
         title: string;
         status: TodoStatus;
         dueDate?: string;
+        editing: boolean;
         
 
         constructor(title: string, status: TodoStatus, dueDate?: string) {
             this.title = title;
             this.status = status;
             this.dueDate = dueDate;
+            this.editing = false;
         }
     };
 

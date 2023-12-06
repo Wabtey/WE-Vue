@@ -8,7 +8,6 @@
         <button v-on:click="clear_tasks()">&#9888; clear all</button>
         <button v-on:click="clear_completed()">&#9888; clear completed</button>
 
-
         <br> filters: 
         <button v-on:click="display_all_task()">All task</button>
         <button v-on:click="display_completed_task()">Completed task</button>
@@ -21,18 +20,35 @@
                 <!-- <button v-on:click="complete_task(todo)" v-if="is_completed(todo)">x</button> -->
                 <button v-on:click="remove_task(todo)">🗑️</button>
                 <button v-on:click="complete_task(todo)">_</button>
-                {{ todo.title }},
+                
+                <input
+                    v-if="todo.editing"
+                    v-model="todo.title"
+                    @blur="todo.editing = false; $emit('update')"
+                    @keyup.enter="todo.editing=false; $emit('update')"
+                    v-focus
+                >
+                <label v-else @dblclick="todo.editing = true;"> {{todo.title}}, </label>
                 {{ todo.status }}
             </li>
         </ul>
         
         <ul v-if="is_display_all() || is_display_completed()">
             <li v-for="todo in completedTodos"
-            :key="todo.title"
+                :key="todo.title"
             >
                 <button v-on:click="remove_task(todo)">🗑️</button>
                 <button v-on:click="complete_task(todo)">x</button>
-                {{ todo.title }},
+                
+                <input
+                    v-if="todo.editing"
+                    v-model="todo.title"
+                    @blur="todo.editing = false; $emit('update')"
+                    @keyup.enter="todo.editing=false; $emit('update')"
+                    v-focus
+                >
+                <label v-else @dblclick="todo.editing = true;"> {{todo.title}}, </label>
+
                 {{ todo.status }}
             </li>
         </ul>
@@ -80,11 +96,10 @@
          * @param todo the todo item to change
          */
         complete_task(todo: TodoItem): void {
-            if (todo.status == TodoStatus.Completed) {
-                todo.status = TodoStatus.InProgress
-            } else {
-                todo.status = TodoStatus.Completed
-            }
+            todo.status =
+                todo.status === TodoStatus.Completed
+                    ? TodoStatus.InProgress
+                    : TodoStatus.Completed;
         }
 
         clear_tasks(): void {
@@ -105,12 +120,16 @@
         }
 
         is_completed(todo: TodoItem): boolean {
-            return todo.status == TodoStatus.Completed;
+            return todo.status === TodoStatus.Completed;
         }
 
         is_not_completed(todo: TodoItem): boolean {
-            return todo.status != TodoStatus.Completed;
+            return todo.status !== TodoStatus.Completed;
         }
+
+        /* ------------------------------ Edit content ------------------------------ */
+
+        // FIXME : the title edit is letter by letter (unfocus between each)
 
         /* --------------------------------- Filters -------------------------------- */
 
@@ -139,13 +158,13 @@
         }
 
         is_display_all(): boolean {
-            return this.filterMode == FilterMode.DisplayAll
+            return this.filterMode === FilterMode.DisplayAll
         }
         is_display_completed(): boolean {
-            return this.filterMode == FilterMode.DisplayCompleted
+            return this.filterMode === FilterMode.DisplayCompleted
         }
         is_display_in_progress(): boolean {
-            return this.filterMode == FilterMode.DisplayInProgress
+            return this.filterMode === FilterMode.DisplayInProgress
         }
     }
     export default toNative(Todos);
