@@ -3,6 +3,12 @@
         <h1>Tasks list</h1>
         <input v-model="input_message" placeholder="Your task">
         <button v-on:click="add_task(input_message)">add</button>
+        
+        <br> Special Actions:
+        <button v-on:click="clear_tasks()">&#9888; clear all</button>
+        <button v-on:click="clear_completed()">&#9888; clear completed</button>
+
+
         <br> filters: 
         <button v-on:click="display_all_task()">All task</button>
         <button v-on:click="display_completed_task()">Completed task</button>
@@ -12,24 +18,26 @@
             <li v-for="todo in inProgressTodos"
                 :key="todo.title"
             >
-                <button v-on:click="complete_task(todo)" v-if="is_completed(todo)">x</button>
-                <button v-on:click="complete_task(todo)" v-if="!is_completed(todo)">_</button>
+                <!-- <button v-on:click="complete_task(todo)" v-if="is_completed(todo)">x</button> -->
+                <button v-on:click="remove_task(todo)">🗑️</button>
+                <button v-on:click="complete_task(todo)">_</button>
                 {{ todo.title }},
                 {{ todo.status }}
             </li>
         </ul>
-   
+        
         <ul v-if="is_display_all() || is_display_completed()">
             <li v-for="todo in completedTodos"
-                :key="todo.title"
+            :key="todo.title"
             >
+                <button v-on:click="remove_task(todo)">🗑️</button>
                 <button v-on:click="complete_task(todo)">x</button>
                 {{ todo.title }},
                 {{ todo.status }}
             </li>
         </ul>
 
-        <footer>
+        <footer v-if="todos_list.length > 0">
           <p>
             You have <span class="highlight">{{ todos_list.length }}</span> todos.
           </p>
@@ -79,6 +87,16 @@
             }
         }
 
+        clear_tasks(): void {
+            // TODO: add warning popup
+            this.todos_list = []
+        }
+
+        clear_completed(): void {
+            // TODO: add warning popup
+            this.todos_list = this.todos_list.filter(this.is_not_completed);
+        }
+        
         remove_task(todo: TodoItem): void {
             const index = this.todos_list.indexOf(todo, 0);
             if (index > -1) {
@@ -88,6 +106,10 @@
 
         is_completed(todo: TodoItem): boolean {
             return todo.status == TodoStatus.Completed;
+        }
+
+        is_not_completed(todo: TodoItem): boolean {
+            return todo.status != TodoStatus.Completed;
         }
 
         /* --------------------------------- Filters -------------------------------- */
